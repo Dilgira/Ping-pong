@@ -1,6 +1,5 @@
 from pygame import *
 
-
 #игровая сцена:
 back = (200, 255, 255) #цвет фона (background)
 win_width = 600
