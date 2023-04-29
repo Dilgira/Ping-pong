@@ -4,7 +4,7 @@ from pygame import *
 img_ball = 'tenis_ball.png'
 img_racket = 'racket.png'
 
-racket_size_x = 45
+racket_size_x = 50
 racket_size_y = 140
 
 # класс который будем использовать для всех спрайтов
@@ -56,6 +56,9 @@ finish = False
 clock = time.Clock()
 FPS = 60
 
+speed_x = 3
+speed_y = 3
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -67,12 +70,17 @@ while game:
         racket1.update_l()
         racket2.update_r()
         # Автоматическое движение мяча
-        ball.rect.x += ball.speed
-        ball.rect.y += ball.speed
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
         #Отрисовывем спрайты    
         racket1.reset()
         racket2.reset()
         ball.reset()
 
+        # Блок условий
+        if ball.rect.y > win_height - 50 or ball.rect.y < 0:
+            speed_y *= -1
+        if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+            speed_x *= -1
     display.update()
     clock.tick(FPS)
