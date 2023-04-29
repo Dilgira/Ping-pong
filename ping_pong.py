@@ -2,6 +2,10 @@ from pygame import *
 
 # константы
 img_ball = 'tenis_ball.png'
+img_racket = 'racket.png'
+
+racket_size_x = 45
+racket_size_y = 140
 
 # класс который будем использовать для всех спрайтов
 class GameSprite(sprite.Sprite):
@@ -16,6 +20,22 @@ class GameSprite(sprite.Sprite):
         self.rect.y = player_y
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
+#класс-наследник Player для ракеток (суперкласс — GameSprite). Данный тип спрайта должен управляться пользователем с помощью стрелок клавиатуры и с помощью клавиш W и S
+class Player(GameSprite):
+    # метод для управления спрайтом клавишами W и S
+    def update_l(self):
+        keys = key.get_pressed()
+        if keys[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_s] and self.rect.y < win_height - racket_size_y - 5:
+            self.rect.y += self.speed
+    # метод для управления спрайтом стрелками клавиатуры
+    def update_r(self):
+        keys = key.get_pressed()
+        if keys[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys[K_DOWN] and self.rect.y < win_height - racket_size_y - 5:
+            self.rect.y += self.speed
 
 
 #игровая сцена:
@@ -27,6 +47,8 @@ window.fill(back)
 
 # Персонажи
 ball = GameSprite(img_ball, 200, 200, 50, 50, 7)
+racket1 = Player(img_racket, 0, 0, racket_size_x, racket_size_y, 6)
+racket2 = Player(img_racket, win_width - racket_size_x, 0, racket_size_x, racket_size_y, 6)
 
 #флаги, отвечающие за состояние игры
 game = True
@@ -41,6 +63,12 @@ while game:
 
    if finish != True:
        window.fill(back)
+        #Передвигаем спрайты
+       racket1.update_l()
+       racket2.update_r()
+       #Отрисовывем спрайты    
+       racket1.reset()
+       racket2.reset()
        ball.reset()
 
    display.update()
