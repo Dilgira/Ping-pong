@@ -47,8 +47,8 @@ window.fill(back)
 
 # Персонажи
 ball = GameSprite(img_ball, 200, 200, 50, 50, 7)
-racket1 = Player(img_racket, 0, 0, racket_size_x, racket_size_y, 6)
-racket2 = Player(img_racket, win_width - racket_size_x, 0, racket_size_x, racket_size_y, 6)
+racket1 = Player(img_racket, 10, 0, racket_size_x, racket_size_y, 6)
+racket2 = Player(img_racket, win_width - racket_size_x - 10, 0, racket_size_x, racket_size_y, 6)
 
 #флаги, отвечающие за состояние игры
 game = True
@@ -57,19 +57,22 @@ clock = time.Clock()
 FPS = 60
 
 while game:
-   for e in event.get():
-       if e.type == QUIT:
-           game = False
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
 
-   if finish != True:
-       window.fill(back)
+    if finish != True:
+        window.fill(back)
         #Передвигаем спрайты
-       racket1.update_l()
-       racket2.update_r()
-       #Отрисовывем спрайты    
-       racket1.reset()
-       racket2.reset()
-       ball.reset()
+        racket1.update_l()
+        racket2.update_r()
+        # Автоматическое движение мяча
+        ball.rect.x += ball.speed
+        ball.rect.y += ball.speed
+        #Отрисовывем спрайты    
+        racket1.reset()
+        racket2.reset()
+        ball.reset()
 
-   display.update()
-   clock.tick(FPS)
+    display.update()
+    clock.tick(FPS)
