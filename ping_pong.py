@@ -50,14 +50,20 @@ ball = GameSprite(img_ball, 200, 200, 50, 50, 7)
 racket1 = Player(img_racket, 10, 0, racket_size_x, racket_size_y, 6)
 racket2 = Player(img_racket, win_width - racket_size_x - 10, 0, racket_size_x, racket_size_y, 6)
 
+# Надписи
+font.init()
+font1 = font.Font(None, 35)
+lose1 = font1.render('PLAYER 1 LOSE!', True, (180, 0, 0))
+lose2 = font1.render('PLAYER 2 LOSE!', True, (180, 0, 0))
+
 #флаги, отвечающие за состояние игры
 game = True
 finish = False
 clock = time.Clock()
 FPS = 60
 
-speed_x = 3
-speed_y = 3
+speed_x = 4
+speed_y = 4
 
 while game:
     for e in event.get():
@@ -78,9 +84,19 @@ while game:
         ball.reset()
 
         # Блок условий
+        # при столкновении с верхней и нижней границами сцены мяч будет отскакивать в противоположном направлении по оси y
         if ball.rect.y > win_height - 50 or ball.rect.y < 0:
             speed_y *= -1
+         # при столкновении с ракетками мяч будет отскакивать в противоположном направлении по оси x, меняем знак скорости по оси x
         if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
             speed_x *= -1
+        #условие проигрыша 1 игрока
+        if ball.rect.x < 0:
+            window.blit(lose1, (200, 200))
+            finish = True
+        #условие проигрыша 2 игрока
+        elif ball.rect.x > win_width - 50:
+            window.blit(lose2, (200, 200))
+            finish = True
     display.update()
     clock.tick(FPS)
